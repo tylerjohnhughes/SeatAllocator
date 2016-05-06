@@ -290,19 +290,26 @@ if __name__ == '__main__':
 
 	# Sort for output.
 	requests.sort(key=lambda r: r.regular + r.extra)
+	skipped.sort(key=lambda r: r.regular + r.extra)
 
-	# Write the results.
+	# Write the results and skipped requests.
+	header = [
+		'StudentID',
+		'Regular',
+		'Extra',
+		'Priority',
+		'LimitedView',
+		'ScreenOnly'
+	]
 	with open(args.outputFile, 'w') as file:
 		writer = csv.writer(file)
-		writer.writerow([
-			'StudentID',
-			'Regular',
-			'Extra',
-			'Priority',
-			'LimitedView',
-			'ScreenOnly'
-		])
+		writer.writerow(header)
 		for request in requests:
+			writer.writerow(request.collapse())
+	with open(args.skippedFile, 'w') as file:
+		writer = csv.writer(file)
+		writer.writerow(header)
+		for request in skipped:
 			writer.writerow(request.collapse())
 
 
